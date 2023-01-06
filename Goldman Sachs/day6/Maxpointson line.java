@@ -40,3 +40,62 @@ public class Solution {
         return result;
     }
 }
+
+// simpler solution
+
+class Solution {
+    public int maxPoints(int[][] points) {
+        
+        int n = points.length;
+        
+        int maxi = 0;
+        for(int i=0;i<n;i++){
+            
+            HashMap<String,Integer> hm = new HashMap<>();
+            int dup = 0;
+            
+            for(int j=0;j<n;j++){
+                
+                int dy = points[i][1]-points[j][1];
+                int dx = points[i][0]-points[j][0];
+                
+                if(dx ==0 && dy == 0)dup++;
+                
+                else {
+                     int gg = GCD(Math.abs(dx),Math.abs(dy));
+                
+                dx/=gg;
+                dy/=gg;
+                    String tp = dx+" "+dy;
+                hm.put(tp,hm.getOrDefault(tp,0)+1);
+                
+                    
+                }
+            }
+            maxi = Math.max(maxi,dup);
+            
+            
+            for(Map.Entry<String,Integer> me:hm.entrySet()){
+                maxi = Math.max(me.getValue()+dup,maxi);
+            }
+        }
+        
+        return maxi;
+    }
+    public int GCD(int x,int y){
+        
+        if(y == 0)return x;
+        
+        return GCD(y,x%y);
+        
+    }
+}
+
+class Pair{
+    int f;
+    int s;
+    public Pair(int f,int s){
+        this.f = f;
+        this.s = s;
+    }
+}
