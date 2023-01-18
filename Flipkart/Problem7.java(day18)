@@ -1,0 +1,43 @@
+class Solution {
+    public int[] closestPrimes(int left, int right) {
+        int ans[] = new int[2];
+        Arrays.fill(ans,-1);
+        List<Integer> primes = soe(right+1,left);
+        
+        if(primes.size()<2)return ans;
+        
+        int mindiff = primes.get(1)-primes.get(0);
+        ans[0]=primes.get(0);ans[1]=primes.get(1);
+        
+        for(int i=2;i<primes.size();i++){
+            int prev = primes.get(i-1);
+            int curr = primes.get(i);
+            
+            if(curr-prev<mindiff){
+                mindiff = curr-prev;
+                ans[0]=prev;ans[1]=curr;
+            }
+        }
+        return ans;
+    }
+    
+    public List<Integer> soe(int n,int left){
+        List<Integer> primes=new ArrayList<>();
+        boolean prime[] = new boolean[n+1];
+        Arrays.fill(prime,true);
+        
+        
+        //start from p=2;check p*p<=n because  p*(p-1) ,p*(p-2)....were already been cut off
+        for(int p=2;p*p<=n;p++){
+            if(!prime[p])continue;
+            for(int i=p*p;i<=n;i+=p){
+                prime[i]=false;
+            }
+        }
+        
+        for(int i=Math.max(left,2);i<n;i++){
+            if(prime[i])primes.add(i);
+        }
+        return primes;
+    }
+}
