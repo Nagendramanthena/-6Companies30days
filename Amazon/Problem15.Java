@@ -1,0 +1,40 @@
+class Solution {
+    public int maxSumMinProduct(int[] nums) {
+        int n = nums.length;
+        int mod = (int)(1e9 + 7);
+        if (n == 1) return (int)(((long)nums[0] * (long)nums[0]) % mod);
+        int[] left = new int[n];
+        Stack<Integer> st = new Stack<>();
+        for (int i = 0; i < n; i++) {
+            while (!st.isEmpty() && nums[st.peek()] >= nums[i]) {
+                st.pop();
+            }
+            if (st.isEmpty()) left[i] = -1;
+            else left[i] = st.peek();
+            st.add(i);
+        }
+        int[] right = new int[n];
+        st = new Stack<>();
+        for (int i = n-1; i >= 0; i--) {
+            while (!st.isEmpty() && nums[st.peek()] >= nums[i]) {
+                st.pop();
+            }
+            if (st.isEmpty()) right[i] = n;
+            else right[i] = st.peek();
+            st.add(i);
+        }
+
+        long res = 0L;
+        long[] preSum = new long[n];
+        preSum[0] = (long)nums[0];
+        for (int i = 1; i < n; i++) {
+            preSum[i] = preSum[i-1] + (long)nums[i];
+        }
+        for (int i = 0; i < n; i++) {
+            long sum = left[i] == -1 ? preSum[right[i]-1] : preSum[right[i]-1] - preSum[left[i]];
+            long cur = (long)nums[i] * sum;
+            res = Math.max(cur, res);
+        }
+        return (int)(res % mod);
+    }
+}
